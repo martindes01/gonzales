@@ -1,4 +1,4 @@
-﻿namespace Gonzales
+﻿namespace martindes01.Gonzales
 {
     partial class Form1
     {
@@ -37,4 +37,3 @@
         #endregion
     }
 }
-

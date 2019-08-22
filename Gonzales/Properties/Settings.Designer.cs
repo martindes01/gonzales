@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gonzales.Properties
+namespace martindes01.Gonzales.Properties
 {
 
 
