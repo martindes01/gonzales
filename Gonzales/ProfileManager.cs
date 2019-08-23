@@ -7,39 +7,41 @@ using System.Web.Script.Serialization;  //
 using System.IO;  //
 
 // TODO Handle exceptions
-using System.Diagnostics;  //
 
 namespace martindes01.Gonzales
 {
-    class ProfileManager
+    /// <summary>
+    /// Exposes static properties and methods for managing and saving mouse profiles.
+    /// </summary>
+    internal static class ProfileManager
     {
 
         // Fields
 
-        private readonly string dirPath;
-        private readonly string companyName = "martindes01";
-        private readonly string fileName = "profiles.json";
-        private readonly string filePath;
-        private readonly string productName = "Gonzales";
+        private static readonly string dirPath;
+        private static readonly string companyName = "martindes01";
+        private static readonly string fileName = "profiles.json";
+        private static readonly string filePath;
+        private static readonly string productName = "Gonzales";
 
-        private JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+        private static readonly JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
 
 
         // Properties
 
-        public List<Profile> Profiles { get; } = new List<Profile>();
+        /// <summary>
+        /// The list of mouse profiles.
+        /// </summary>
+        public static List<Profile> Profiles { get; } = new List<Profile>();
 
 
         // Constructors
 
-        public ProfileManager()
+        static ProfileManager()
         {
             // Compute directory and file paths
             dirPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), companyName, productName);
             filePath = Path.Combine(dirPath, fileName);
-
-            Console.WriteLine("Dir: {0}", dirPath);
-            Console.WriteLine("File: {0}", filePath);
 
             // Create directory
             Directory.CreateDirectory(dirPath);
@@ -48,7 +50,10 @@ namespace martindes01.Gonzales
 
         // Methods
 
-        public void LoadProfiles()
+        /// <summary>
+        /// Loads the profiles from the saved json file if it exists.
+        /// </summary>
+        public static void LoadProfiles()
         {
             // Check profiles file exists
             if (File.Exists(filePath))
@@ -56,28 +61,40 @@ namespace martindes01.Gonzales
                 // Load JSON from file
                 string jsonData = File.ReadAllText(filePath);
 
-                Console.WriteLine("Loaded: {0}", jsonData);
-
                 // Deserialise JSON to type List<Profile> and add to Profiles
-                var sw1 = new Stopwatch();
-                sw1.Start();
                 Profiles.AddRange(jsSerializer.Deserialize<List<Profile>>(jsonData));
-                sw1.Stop();
-                Console.WriteLine(sw1.ElapsedMilliseconds);
 
-                for (int i = 0; i < Profiles.Count; i++)
+                // Ensure valid mouse speeds
+                foreach (Profile profile in Profiles)
                 {
-                    Console.WriteLine("Profile {0}: {1}, {2}, {3}", i, Profiles[i].Name, Profiles[i].Speed, Profiles[i].Acceleration);
+                    profile.ValidateSpeed();
                 }
+
+                Console.WriteLine(ProfilesToString());
             }
         }
 
-        public void SaveProfiles()
+        /// <summary>
+        /// Returns a string reresentation of stored profiles.
+        /// </summary>
+        /// <returns>Returns a string reresentation of stored profiles.</returns>
+        public static string ProfilesToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder("Profiles (" + Profiles.Count + "):");
+            foreach (Profile profile in Profiles)
+            {
+                stringBuilder.Append("\n\t" + profile.ToString());
+            }
+            return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Saves the profiles to a json file.
+        /// </summary>
+        public static void SaveProfiles()
         {
             // Serialise Profiles to JSON
             string jsonData = jsSerializer.Serialize(Profiles);
-
-            Console.WriteLine("Serialised: {0}", jsonData);
 
             // Save JSON to file
             File.WriteAllText(filePath, jsonData);
