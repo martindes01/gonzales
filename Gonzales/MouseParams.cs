@@ -7,30 +7,22 @@ using System.Threading.Tasks;
 
 namespace martindes01.Gonzales
 {
-    class MouseOptions
+    class MouseParams
     {
         // See https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa
         // See https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mouse_event#remarks
-        
+
 
         // Constants
 
-        /// <summary>
-        /// The default state for system mouse acceleration.
-        /// </summary>
-        public const bool defaultAcceleration = true;
-        /// <summary>
-        /// The default system mouse speed.
-        /// </summary>
-        public const int defaultSpeed = 10;
+        private const bool defaultAcceleration = true;
+        private const int defaultSpeed = 10;
 
         // uiAction
         private const uint SPI_GETMOUSE = 0x0003;
         private const uint SPI_SETMOUSE = 0x0004;
         private const uint SPI_GETMOUSESPEED = 0x0070;
         private const uint SPI_SETMOUSESPEED = 0x0071;
-        //private const uint SPI_GETMOUSETRAILS = 0x005E;
-        //private const uint SPI_SETMOUSETRAILS = 0x005D;
 
         // fWinIni
         private const uint SPIF_SENDCHANGE = 0x0002;
@@ -42,11 +34,12 @@ namespace martindes01.Gonzales
         private static extern bool SystemParametersInfo(uint uiAction, uint uiParam, IntPtr pvParam, uint fWinIni);
 
 
-        // Getters and setters
+        // Getters
 
         /// <summary>
         /// Determines whether system mouse acceleration is enabled.
         /// </summary>
+        /// <para>System mouse acceleration has two levels when enabled. Only level one is used.</para>
         /// <returns><c>true</c> if mouse acceleration enabled</returns>
         public bool GetAcceleration()
         {
@@ -57,6 +50,48 @@ namespace martindes01.Gonzales
             // Mouse acceleration enabled if this value greater than 0
             return parameters[2] != 0;
         }
+
+        /// <summary>
+        /// Gets the default mouse acceleration state.
+        /// </summary>
+        /// <para>System mouse acceleration has two levels when enabled. Only level one is used.</para>
+        /// <para>The default mouse acceleration state is <c>true</c>.</para>
+        /// <returns>the default mouse acceleration state</returns>
+        public bool GetDefaultAcceleration()
+        {
+            return defaultAcceleration;
+        }
+
+        /// <summary>
+        /// Gets the default system mouse speed.
+        /// </summary>
+        /// <remarks>
+        /// <para>Mouse speed is an integer between<c>1</c> and<c>20</c>, inclusive.</para>
+        /// <para>The default system mouse speed is <c>10</c>.</para>
+        /// </remarks>
+        /// <returns>the default system mouse speed</returns>
+        public int GetDefaultSpeed()
+        {
+            return defaultSpeed;
+        }
+
+        /// <summary>
+        /// Gets the system mouse speed.
+        /// </summary>
+        /// <remarks>
+        /// <para>Mouse speed is an integer between <c>1</c> and <c>20</c>, inclusive.</para>
+        /// </remarks>
+        /// <returns>the system mouse speed</returns>
+        public unsafe int GetSpeed()
+        {
+            // Allocate mouse speed to new integer
+            int speed;
+            SystemParametersInfo(SPI_GETMOUSESPEED, 0, new IntPtr(&speed), 0);
+            return speed;
+        }
+
+
+        // Setters
 
         /// <summary>
         /// Sets the system mouse acceleration.
@@ -80,27 +115,14 @@ namespace martindes01.Gonzales
         }
 
         /// <summary>
-        /// Gets the system mouse speed.
-        /// </summary>
-        /// <remarks>Mouse speed is an integer between 1 and 20, inclusive.</remarks>
-        /// <returns>the system mouse speed</returns>
-        public unsafe int GetSpeed()
-        {
-            // Allocate mouse speed to new integer
-            int speed;
-            SystemParametersInfo(SPI_GETMOUSESPEED, 0, new IntPtr(&speed), 0);
-            return speed;
-        }
-
-        /// <summary>
         /// Sets the system mouse speed.
         /// </summary>
         /// <remarks>
-        /// <para>Mouse speed is an integer between 1 and 20, inclusive.</para>
+        /// <para>Mouse speed is an integer between <c>1</c> and <c>20</c>, inclusive.</para>
         /// <para>If <paramref name="speed"/> is less than <c>1</c>, the mouse speed is set to <c>1</c>.</para>
         /// <para>If <paramref name="speed"/> is greater than <c>20</c>, the mouse speed is set to <c>20</c>.</para>
         /// </remarks>
-        /// <param name="speed"></param>
+        /// <param name="speed">the desired mouse speed</param>
         public void SetSpeed(int speed)
         {
             // Ensure value between 1 and 20 inclusive

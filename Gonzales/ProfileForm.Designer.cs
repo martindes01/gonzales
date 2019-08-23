@@ -1,6 +1,6 @@
 ﻿namespace martindes01.Gonzales
 {
-    partial class Form1
+    partial class ProfileForm
     {
         /// <summary>
         /// Required designer variable.
