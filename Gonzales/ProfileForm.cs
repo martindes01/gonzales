@@ -17,7 +17,7 @@ namespace martindes01.Gonzales
 
         // Field
 
-        private readonly Profile initialProfile;
+        private Profile fallbackProfile;
 
 
         // Constructors
@@ -25,7 +25,7 @@ namespace martindes01.Gonzales
         public ProfileForm()
         {
             // Store current profile
-            initialProfile = new Profile("", MouseParams.GetSpeed(), MouseParams.GetAcceleration());
+            fallbackProfile = new Profile("", MouseParams.GetSpeed(), MouseParams.GetAcceleration());
 
             // Initialise form (designer code)
             InitializeComponent();
@@ -33,10 +33,15 @@ namespace martindes01.Gonzales
             // Initialise data grid
             DataGridViewProfiles();
 
+            // Display current mouse settings
+            RefreshCurrentSettings();
+
             // Assign event handlers
+            FormClosing += ProfileForm_FormClosing;
             buttonApply.Click += ButtonApply_Click;
             buttonCancel.Click += ButtonCancel_Click;
             buttonOK.Click += ButtonOK_Click;
+            buttonRefresh.Click += ButtonRefresh_Click;
             dataGridViewProfiles.CellClick += DataGridViewProfiles_CellClick;
             dataGridViewProfiles.CellPainting += DataGridViewProfiles_CellPainting;
             dataGridViewProfiles.CellValueChanged += DataGridViewProfiles_CellValueChanged;
@@ -52,15 +57,15 @@ namespace martindes01.Gonzales
             bindingSourceProfiles.ResetBindings(false);
         }
 
-        private void DataGridViewProfiles_DataError(object sender, DataGridViewDataErrorEventArgs e)
-        {
-            // Empty data error handler
-            // Invalid cell value changes not committed
-            // Error dialog suppressed
-        }
-
 
         // Helper functions
+
+        public void RefreshCurrentSettings()
+        {
+            // Display the current mouse settings
+            textBoxSpeed.Text = MouseParams.GetSpeed().ToString();
+            textBoxAcceleration.Text = MouseParams.GetAcceleration().ToString();
+        }
 
         public void DataGridViewProfiles()
         {
@@ -130,16 +135,27 @@ namespace martindes01.Gonzales
 
         // Event handlers
 
+        private void ProfileForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            fallbackProfile.Apply();
+        }
+
         private void ButtonApply_Click(object sender, EventArgs e)
         {
             // Save profiles
             ProfileManager.SaveProfiles();
+
+            // Update fallback profile
+            fallbackProfile = new Profile("", MouseParams.GetSpeed(), MouseParams.GetAcceleration());
+
+            // Refresh current settings
+            RefreshCurrentSettings();
         }
 
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
-            // Restore initial profile and close form
-            initialProfile.Apply();
+            // Restore fallback profile and close form
+            fallbackProfile.Apply();
             Close();
         }
 
@@ -148,6 +164,11 @@ namespace martindes01.Gonzales
             // Save profiles and close form
             ProfileManager.SaveProfiles();
             Close();
+        }
+
+        private void ButtonRefresh_Click(object sender, EventArgs e)
+        {
+            RefreshCurrentSettings();
         }
 
         private void ColumnSpeed_KeyPress(object sender, KeyPressEventArgs e)
@@ -211,10 +232,14 @@ namespace martindes01.Gonzales
                 // Handle value changes
                 if (e.ColumnIndex == columnActive.Index)
                 {
+                    // Check cell value is true
                     if (IsCellChecked(e.RowIndex, e.ColumnIndex))
                     {
                         // Apply selected profile
                         ProfileManager.Profiles[e.RowIndex].Apply();
+
+                        // Refresh current settings
+                        RefreshCurrentSettings();
 
                         // Deselect all other profiles
                         foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
@@ -251,10 +276,17 @@ namespace martindes01.Gonzales
             // DataGridView.CellValueChanged does not occur until value committed
             // This usually occurs when focus leaves cell
             // Handle change immediately by committing change when cell clicked
-            if (dataGridViewProfiles.IsCurrentCellDirty && dataGridViewProfiles.CurrentCell.ColumnIndex == columnActive.Index)
+            if (dataGridViewProfiles.IsCurrentCellDirty && dataGridViewProfiles.CurrentCell.GetType() == typeof(DataGridViewCheckBoxCell))
             {
                 dataGridViewProfiles.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
+        }
+
+        private void DataGridViewProfiles_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            // Empty data error handler
+            // Invalid cell value changes not committed
+            // Error dialog suppressed
         }
 
         private void DataGridViewProfiles_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
