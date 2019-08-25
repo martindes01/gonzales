@@ -37,14 +37,26 @@ namespace martindes01.Gonzales
             buttonApply.Click += ButtonApply_Click;
             buttonCancel.Click += ButtonCancel_Click;
             buttonOK.Click += ButtonOK_Click;
+            dataGridViewProfiles.CellClick += DataGridViewProfiles_CellClick;
             dataGridViewProfiles.CellPainting += DataGridViewProfiles_CellPainting;
             dataGridViewProfiles.CellValueChanged += DataGridViewProfiles_CellValueChanged;
             dataGridViewProfiles.CurrentCellDirtyStateChanged += DataGridViewProfiles_CurrentCellDirtyStateChanged;
+            dataGridViewProfiles.DataError += DataGridViewProfiles_DataError;
             dataGridViewProfiles.EditingControlShowing += DataGridViewProfiles_EditingControlShowing;
+            dataGridViewProfiles.RowPostPaint += DataGridViewProfiles_RowPostPaint;
+            dataGridViewProfiles.RowsAdded += DataGridViewProfiles_RowsAdded;
+            dataGridViewProfiles.RowsRemoved += DataGridViewProfiles_RowsRemoved;
 
             // Load saved profiles and reset bindings for data grid
             ProfileManager.LoadProfiles();
             bindingSourceProfiles.ResetBindings(false);
+        }
+
+        private void DataGridViewProfiles_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            // Empty data error handler
+            // Invalid cell value changes not committed
+            // Error dialog suppressed
         }
 
 
@@ -62,6 +74,57 @@ namespace martindes01.Gonzales
             columnName.DataPropertyName = "Name";
             columnSpeed.DataPropertyName = "Speed";
             columnAcceleration.DataPropertyName = "Acceleration";
+
+            // Hide row header content
+            dataGridViewProfiles.RowHeadersDefaultCellStyle.Padding = new Padding(dataGridViewProfiles.RowHeadersWidth / 2);
+        }
+
+        public bool IsCellChecked(int rowIndex, int columnIndex)
+        {
+            // Return true if value not null and is true
+            object value = dataGridViewProfiles.Rows[rowIndex].Cells[columnIndex].Value;
+            return value != null && (bool)value;
+        }
+
+        public bool IsRowIndexValid(int rowIndex)
+        {
+            // Return true if row index within bounds and not new row
+            return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count;
+            //return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count && !dataGridViewProfiles.Rows[rowIndex].IsNewRow;
+        }
+
+        public void NumberRows()
+        {
+            // Number each row
+            foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
+            {
+                row.HeaderCell.Value = (row.Index + 1).ToString();
+            }
+        }
+
+        public void ShowActiveProfile()
+        {
+            // Go through each row and show whether the corresponding profile is active
+            foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
+            {
+                if (!row.IsNewRow)
+                {
+                    ShowWhetherProfileActive(row.Index);
+                }
+            }
+        }
+
+        public void ShowWhetherProfileActive(int rowIndex)
+        {
+            // Get current mouse parameters
+            int speed = MouseParams.GetSpeed();
+            bool acceleration = MouseParams.GetAcceleration();
+
+            // Set appropriate value in profile activation column for this row
+            if (dataGridViewProfiles.Rows[rowIndex] is DataGridViewRow row)
+            {
+                row.Cells[columnActive.Index].Value = (int)row.Cells[columnSpeed.Index].Value == speed && (bool)row.Cells[columnAcceleration.Index].Value == acceleration;
+            }
         }
 
 
@@ -98,17 +161,30 @@ namespace martindes01.Gonzales
             }
         }
 
+        private void DataGridViewProfiles_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check row index valid
+            if (IsRowIndexValid(e.RowIndex))
+            {
+                // Set cell true if profile activation column clicked
+                if (e.ColumnIndex == columnActive.Index)
+                {
+                    dataGridViewProfiles.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
+                    dataGridViewProfiles.Invalidate();
+                }
+            }
+        }
+
         private void DataGridViewProfiles_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             // Check rows have been drawn and cell is in profile activation column
-            if (e.RowIndex >= 0 && e.ColumnIndex == columnActive.Index)
+            if (IsRowIndexValid(e.RowIndex) && e.ColumnIndex == columnActive.Index)
             {
                 // Print cell background without selection highlight
                 e.PaintBackground(e.ClipBounds, false);
 
                 // Print checkmark in cell if checked
-                DataGridViewCheckBoxCell cell = dataGridViewProfiles.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewCheckBoxCell;
-                if (cell.Value != null && (bool)cell.Value)
+                if (IsCellChecked(e.RowIndex, e.ColumnIndex))
                 {
                     Rectangle rectangle = new Rectangle(
                         e.CellBounds.X + (e.CellBounds.Width - 13) / 2,
@@ -119,6 +195,9 @@ namespace martindes01.Gonzales
                     ControlPaint.DrawMenuGlyph(e.Graphics, rectangle, MenuGlyph.Checkmark);
                 }
 
+                // Paint focus rectangle around cell
+                e.Paint(e.ClipBounds, DataGridViewPaintParts.Focus);
+
                 // Prevent event propagation
                 e.Handled = true;
             }
@@ -126,36 +205,45 @@ namespace martindes01.Gonzales
 
         private void DataGridViewProfiles_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            // Handle value changes
-            if (e.ColumnIndex == columnActive.Index)
+            // Check row index valid
+            if (IsRowIndexValid(e.RowIndex))
             {
-                // Check cell value true
-                if ((bool)dataGridViewProfiles.Rows[e.RowIndex].Cells[e.ColumnIndex].Value)
+                // Handle value changes
+                if (e.ColumnIndex == columnActive.Index)
                 {
-                    // Apply selected profile
-                    ProfileManager.Profiles[e.RowIndex].Apply();
-
-                    // Deselect all other profiles
-                    foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
+                    if (IsCellChecked(e.RowIndex, e.ColumnIndex))
                     {
-                        if (row.Index != e.RowIndex)
+                        // Apply selected profile
+                        ProfileManager.Profiles[e.RowIndex].Apply();
+
+                        // Deselect all other profiles
+                        foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
                         {
-                            row.Cells[columnActive.Index].Value = false;
+                            if (row.Index != e.RowIndex)
+                            {
+                                row.Cells[columnActive.Index].Value = false;
+                            }
                         }
                     }
                 }
-            }
-            else if (e.ColumnIndex == columnSpeed.Index)
-            {
-                // Validate edited profile speed
-                ProfileManager.Profiles[e.RowIndex].ValidateSpeed();
+                else if (e.ColumnIndex == columnSpeed.Index)
+                {
+                    // Validate edited profile speed
+                    ProfileManager.Profiles[e.RowIndex].ValidateSpeed();
+                    ShowWhetherProfileActive(e.RowIndex);
+                }
+                else if (e.ColumnIndex == columnAcceleration.Index)
+                {
+                    ShowWhetherProfileActive(e.RowIndex);
+                }
+
+                // Enable apply button if changes made
+                buttonApply.Enabled = true;
+
+                // Cause paint message to be sent to control
+                dataGridViewProfiles.Invalidate();
             }
 
-            // Enable apply button if changes made
-            buttonApply.Enabled = true;
-
-            // Cause paint message to be sent to control
-            dataGridViewProfiles.Invalidate();
         }
 
         private void DataGridViewProfiles_CurrentCellDirtyStateChanged(object sender, EventArgs e)
@@ -163,7 +251,7 @@ namespace martindes01.Gonzales
             // DataGridView.CellValueChanged does not occur until value committed
             // This usually occurs when focus leaves cell
             // Handle change immediately by committing change when cell clicked
-            if (dataGridViewProfiles.IsCurrentCellDirty)
+            if (dataGridViewProfiles.IsCurrentCellDirty && dataGridViewProfiles.CurrentCell.ColumnIndex == columnActive.Index)
             {
                 dataGridViewProfiles.CommitEdit(DataGridViewDataErrorContexts.Commit);
             }
@@ -183,6 +271,40 @@ namespace martindes01.Gonzales
                     textBox.KeyPress += ColumnSpeed_KeyPress;
                 }
             }
+        }
+
+        private void DataGridViewProfiles_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            // Get row header text
+            object value = dataGridViewProfiles.Rows[e.RowIndex].HeaderCell.Value;
+            String text = value != null ? value.ToString() : "";
+
+            // Measure row header text
+            Size size = TextRenderer.MeasureText(text, dataGridViewProfiles.Font);
+
+            // Paint row header text (cannot print since row header content hidden by padding)
+            e.Graphics.DrawString(
+                text,
+                dataGridViewProfiles.Font,
+                new SolidBrush(dataGridViewProfiles.RowHeadersDefaultCellStyle.ForeColor),
+                e.RowBounds.Left + (dataGridViewProfiles.RowHeadersWidth - size.Width) / 2,
+                e.RowBounds.Top + (e.RowBounds.Height - size.Height) / 2
+            );
+        }
+
+        private void DataGridViewProfiles_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            // Number each row
+            NumberRows();
+
+            // Show active profile
+            ShowActiveProfile();
+        }
+
+        private void DataGridViewProfiles_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            // Number each row
+            NumberRows();
         }
 
     }

@@ -30,12 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBoxProfiles = new System.Windows.Forms.GroupBox();
             this.dataGridViewProfiles = new System.Windows.Forms.DataGridView();
             this.bindingSourceProfiles = new System.Windows.Forms.BindingSource(this.components);
-            this.buttonEdit = new System.Windows.Forms.Button();
-            this.buttonMoveDown = new System.Windows.Forms.Button();
-            this.buttonMoveUp = new System.Windows.Forms.Button();
             this.groupBoxEdit = new System.Windows.Forms.GroupBox();
             this.numericUpDownSpeed = new System.Windows.Forms.NumericUpDown();
             this.labelAcceleration = new System.Windows.Forms.Label();
@@ -64,9 +62,6 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxProfiles.Controls.Add(this.dataGridViewProfiles);
-            this.groupBoxProfiles.Controls.Add(this.buttonEdit);
-            this.groupBoxProfiles.Controls.Add(this.buttonMoveDown);
-            this.groupBoxProfiles.Controls.Add(this.buttonMoveUp);
             this.groupBoxProfiles.Location = new System.Drawing.Point(8, 8);
             this.groupBoxProfiles.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxProfiles.Name = "groupBoxProfiles";
@@ -85,7 +80,14 @@
             this.dataGridViewProfiles.AutoGenerateColumns = false;
             this.dataGridViewProfiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewProfiles.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dataGridViewProfiles.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewProfiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewProfiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnActive,
@@ -98,43 +100,10 @@
             this.dataGridViewProfiles.Location = new System.Drawing.Point(8, 21);
             this.dataGridViewProfiles.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridViewProfiles.Name = "dataGridViewProfiles";
-            this.dataGridViewProfiles.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridViewProfiles.RowHeadersVisible = false;
-            this.dataGridViewProfiles.Size = new System.Drawing.Size(425, 269);
+            this.dataGridViewProfiles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.dataGridViewProfiles.ShowEditingIcon = false;
+            this.dataGridViewProfiles.Size = new System.Drawing.Size(508, 269);
             this.dataGridViewProfiles.TabIndex = 4;
-            // 
-            // buttonEdit
-            // 
-            this.buttonEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonEdit.Location = new System.Drawing.Point(441, 267);
-            this.buttonEdit.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(75, 23);
-            this.buttonEdit.TabIndex = 3;
-            this.buttonEdit.Text = "Edit";
-            this.buttonEdit.UseVisualStyleBackColor = true;
-            // 
-            // buttonMoveDown
-            // 
-            this.buttonMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMoveDown.Location = new System.Drawing.Point(441, 52);
-            this.buttonMoveDown.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonMoveDown.Name = "buttonMoveDown";
-            this.buttonMoveDown.Size = new System.Drawing.Size(75, 23);
-            this.buttonMoveDown.TabIndex = 2;
-            this.buttonMoveDown.Text = "Move down";
-            this.buttonMoveDown.UseVisualStyleBackColor = true;
-            // 
-            // buttonMoveUp
-            // 
-            this.buttonMoveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonMoveUp.Location = new System.Drawing.Point(441, 21);
-            this.buttonMoveUp.Margin = new System.Windows.Forms.Padding(4);
-            this.buttonMoveUp.Name = "buttonMoveUp";
-            this.buttonMoveUp.Size = new System.Drawing.Size(75, 23);
-            this.buttonMoveUp.TabIndex = 1;
-            this.buttonMoveUp.Text = "Move up";
-            this.buttonMoveUp.UseVisualStyleBackColor = true;
             // 
             // groupBoxEdit
             // 
@@ -265,10 +234,10 @@
             // 
             this.columnActive.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.columnActive.Frozen = true;
-            this.columnActive.HeaderText = "";
+            this.columnActive.HeaderText = "Active";
             this.columnActive.Name = "columnActive";
             this.columnActive.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnActive.Width = 21;
+            this.columnActive.Width = 43;
             // 
             // columnName
             // 
@@ -278,12 +247,12 @@
             // columnSpeed
             // 
             this.columnSpeed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle1;
-            this.columnSpeed.HeaderText = "Mouse speed";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle2;
+            this.columnSpeed.HeaderText = "Speed";
             this.columnSpeed.Name = "columnSpeed";
             this.columnSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnSpeed.Width = 96;
+            this.columnSpeed.Width = 63;
             // 
             // columnAcceleration
             // 
@@ -305,8 +274,6 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.groupBoxProfiles);
             this.Controls.Add(this.groupBoxEdit);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
             this.Name = "ProfileForm";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Gonzales";
@@ -334,9 +301,6 @@
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.NumericUpDown numericUpDownSpeed;
         private System.Windows.Forms.Button buttonApply;
-        private System.Windows.Forms.Button buttonEdit;
-        private System.Windows.Forms.Button buttonMoveDown;
-        private System.Windows.Forms.Button buttonMoveUp;
         private System.Windows.Forms.DataGridView dataGridViewProfiles;
         private System.Windows.Forms.BindingSource bindingSourceProfiles;
         private System.Windows.Forms.DataGridViewCheckBoxColumn columnActive;

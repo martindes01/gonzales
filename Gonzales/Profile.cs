@@ -30,7 +30,8 @@ namespace martindes01.Gonzales
         /// <summary>
         /// The mouse acceleration of this profile.
         /// </summary>
-        public bool Acceleration { get; set; } = MouseParams.defaultAcceleration;
+        /// <remarks>The default profile mouse acceleration is not the system default.</remarks>
+        public bool Acceleration { get; set; } = false;
 
 
         // Constructors
