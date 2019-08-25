@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;  //
+using System.IO;  //
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;  //
-using System.IO;  //
 
 // TODO Handle exceptions
 
@@ -70,6 +71,7 @@ namespace martindes01.Gonzales
                     profile.ValidateSpeed();
                 }
 
+                // DEBUG
                 Console.WriteLine(ProfilesToString());
             }
         }
@@ -95,6 +97,9 @@ namespace martindes01.Gonzales
         {
             // Serialise Profiles to JSON
             string jsonData = jsSerializer.Serialize(Profiles);
+
+            // DEBUG
+            Console.WriteLine(jsonData);
 
             // Save JSON to file
             File.WriteAllText(filePath, jsonData);

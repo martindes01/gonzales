@@ -90,7 +90,7 @@ namespace martindes01.Gonzales
         /// <remarks>
         /// System mouse acceleration has two levels when enabled. Only level one is used.
         /// </remarks>
-        /// <param name="acceleration">Whether mouse acceleration should be enabled.</param>
+        /// <param name="acceleration">whether mouse acceleration should be enabled.</param>
         public static void SetAcceleration(bool acceleration)
         {
             // Allocate mouse parameters to integer array
