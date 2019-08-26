@@ -148,7 +148,7 @@ namespace martindes01.Gonzales
             // Update fallback profile
             fallbackProfile = new Profile("", MouseParams.GetSpeed(), MouseParams.GetAcceleration());
 
-            // Refresh current settings
+            // Refresh displayed settings
             RefreshCurrentSettings();
         }
 
@@ -168,6 +168,7 @@ namespace martindes01.Gonzales
 
         private void ButtonRefresh_Click(object sender, EventArgs e)
         {
+            // Refresh displayed settings
             RefreshCurrentSettings();
         }
 
@@ -238,7 +239,7 @@ namespace martindes01.Gonzales
                         // Apply selected profile
                         ProfileManager.Profiles[e.RowIndex].Apply();
 
-                        // Refresh current settings
+                        // Refresh displayed settings
                         RefreshCurrentSettings();
 
                         // Deselect all other profiles
@@ -275,7 +276,7 @@ namespace martindes01.Gonzales
         {
             // DataGridView.CellValueChanged does not occur until value committed
             // This usually occurs when focus leaves cell
-            // Handle change immediately by committing change when cell clicked
+            // Handle change immediately for checkbox cells by committing change when cell clicked
             if (dataGridViewProfiles.IsCurrentCellDirty && dataGridViewProfiles.CurrentCell.GetType() == typeof(DataGridViewCheckBoxCell))
             {
                 dataGridViewProfiles.CommitEdit(DataGridViewDataErrorContexts.Commit);
@@ -309,7 +310,7 @@ namespace martindes01.Gonzales
         {
             // Get row header text
             object value = dataGridViewProfiles.Rows[e.RowIndex].HeaderCell.Value;
-            String text = value != null ? value.ToString() : "";
+            string text = value != null ? value.ToString() : "";
 
             // Measure row header text
             Size size = TextRenderer.MeasureText(text, dataGridViewProfiles.Font);

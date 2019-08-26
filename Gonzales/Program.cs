@@ -16,7 +16,12 @@ namespace martindes01.Gonzales
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ProfileForm());
+
+            // Ensure task icon is disposed on application exit
+            using (TaskIcon taskIcon = new TaskIcon())
+            {
+                Application.Run();
+            }
         }
     }
 }
