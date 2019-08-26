@@ -20,7 +20,7 @@ namespace martindes01.Gonzales
 
         // Constructors
 
-        public TaskIcon() {
+        public TaskIcon(bool showProfileForm) {
             // Initialise toolstrip items to display at bottom of context menu
             toolStripMenuItems = new ToolStripItem[]
             {
@@ -38,6 +38,12 @@ namespace martindes01.Gonzales
             notifyIcon.Icon = profileForm.Icon;
             notifyIcon.Text = Application.ProductName;
             notifyIcon.Visible = true;
+
+            // Show profile form if requested
+            if (showProfileForm)
+            {
+                ShowProfileForm(this, EventArgs.Empty);
+            }
         }
 
 
