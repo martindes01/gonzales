@@ -94,15 +94,28 @@ namespace martindes01.Gonzales
 
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // Get current mouse parameters
+            int speed = MouseParams.GetSpeed();
+            bool acceleration = MouseParams.GetAcceleration();
+
             // Remove old items
             contextMenuStrip.Items.Clear();
 
             // Add an item for each mouse profile
-            // Include the index as the name property of the item for identification
             ProfileManager.LoadProfiles();
             for (int i = 0; i < ProfileManager.Profiles.Count; i++)
             {
-                contextMenuStrip.Items.Add(new ToolStripMenuItem(ProfileManager.Profiles[i].Name, null, null, i.ToString()));
+                Profile profile = ProfileManager.Profiles[i];
+
+                // Include the index as the name property of the item for identification
+                string text = profile.Name.Trim() == "" ? "Untitled profile" : profile.Name.Trim();
+                contextMenuStrip.Items.Add(new ToolStripMenuItem(text, null, null, i.ToString()));
+
+                // Check item if assoicated profile is active
+                if (contextMenuStrip.Items[i] is ToolStripMenuItem item)
+                {
+                    item.Checked = profile.Speed == speed && profile.Acceleration == acceleration;
+                }
             }
 
             // Add final items

@@ -60,13 +60,6 @@ namespace martindes01.Gonzales
 
         // Helper functions
 
-        public void RefreshCurrentSettings()
-        {
-            // Display the current mouse settings
-            textBoxSpeed.Text = MouseParams.GetSpeed().ToString();
-            textBoxAcceleration.Text = MouseParams.GetAcceleration().ToString();
-        }
-
         public void DataGridViewProfiles()
         {
             // Custom columns already exist
@@ -107,29 +100,33 @@ namespace martindes01.Gonzales
             }
         }
 
-        public void ShowActiveProfile()
+        public void RefreshCurrentSettings()
         {
-            // Go through each row and show whether the corresponding profile is active
-            foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
-            {
-                if (!row.IsNewRow)
-                {
-                    ShowWhetherProfileActive(row.Index);
-                }
-            }
+            // Display the current mouse settings
+            textBoxSpeed.Text = MouseParams.GetSpeed().ToString();
+            textBoxAcceleration.Text = MouseParams.GetAcceleration().ToString();
         }
 
-        public void ShowWhetherProfileActive(int rowIndex)
+        public void ShowActiveProfiles()
         {
             // Get current mouse parameters
             int speed = MouseParams.GetSpeed();
             bool acceleration = MouseParams.GetAcceleration();
 
-            // Set appropriate value in profile activation column for this row
-            if (dataGridViewProfiles.Rows[rowIndex] is DataGridViewRow row)
+            // Unassign event handler to prevent StackOverFlowException on subsequent cell value changes
+            dataGridViewProfiles.CellValueChanged -= DataGridViewProfiles_CellValueChanged;
+
+            // Go through each row and show whether the corresponding profile is active
+            foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
             {
-                row.Cells[columnActive.Index].Value = (int)row.Cells[columnSpeed.Index].Value == speed && (bool)row.Cells[columnAcceleration.Index].Value == acceleration;
+                if (!row.IsNewRow)
+                {
+                    row.Cells[columnActive.Index].Value = (int)row.Cells[columnSpeed.Index].Value == speed && (bool)row.Cells[columnAcceleration.Index].Value == acceleration;
+                }
             }
+
+            // Reassign event handler
+            dataGridViewProfiles.CellValueChanged += DataGridViewProfiles_CellValueChanged;
         }
 
 
@@ -192,6 +189,8 @@ namespace martindes01.Gonzales
                 if (e.ColumnIndex == columnActive.Index)
                 {
                     dataGridViewProfiles.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = true;
+
+                    // Cause paint message to be sent to control
                     dataGridViewProfiles.Invalidate();
                 }
             }
@@ -241,26 +240,31 @@ namespace martindes01.Gonzales
 
                         // Refresh displayed settings
                         RefreshCurrentSettings();
+                    }
 
-                        // Deselect all other profiles
-                        foreach (DataGridViewRow row in dataGridViewProfiles.Rows)
-                        {
-                            if (row.Index != e.RowIndex)
-                            {
-                                row.Cells[columnActive.Index].Value = false;
-                            }
-                        }
+                    // Show active profiles
+                    ShowActiveProfiles();
+                }
+                else if (e.ColumnIndex == columnName.Index)
+                {
+                    // Trim whitespace from profile name
+                    if (dataGridViewProfiles.Rows[e.RowIndex].Cells[columnName.Index] is DataGridViewTextBoxCell cell)
+                    {
+                        cell.Value = cell.Value.ToString().Trim();
                     }
                 }
                 else if (e.ColumnIndex == columnSpeed.Index)
                 {
                     // Validate edited profile speed
                     ProfileManager.Profiles[e.RowIndex].ValidateSpeed();
-                    ShowWhetherProfileActive(e.RowIndex);
+
+                    // Show active profiles
+                    ShowActiveProfiles();
                 }
                 else if (e.ColumnIndex == columnAcceleration.Index)
                 {
-                    ShowWhetherProfileActive(e.RowIndex);
+                    // Show active profiles
+                    ShowActiveProfiles();
                 }
 
                 // Enable apply button if changes made
@@ -330,8 +334,8 @@ namespace martindes01.Gonzales
             // Number each row
             NumberRows();
 
-            // Show active profile
-            ShowActiveProfile();
+            // Show active profiles
+            ShowActiveProfiles();
         }
 
         private void DataGridViewProfiles_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
