@@ -34,6 +34,7 @@
             this.bindingSourceProfiles = new System.Windows.Forms.BindingSource(this.components);
             this.buttonApply = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonDonate = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonRefresh = new System.Windows.Forms.Button();
             this.columnAcceleration = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -47,8 +48,8 @@
             this.labelSpeed = new System.Windows.Forms.Label();
             this.textBoxAcceleration = new System.Windows.Forms.TextBox();
             this.textBoxSpeed = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProfiles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).BeginInit();
             this.groupBoxCurrent.SuspendLayout();
             this.groupBoxProfiles.SuspendLayout();
             this.SuspendLayout();
@@ -77,6 +78,17 @@
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
+            // buttonDonate
+            // 
+            this.buttonDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonDonate.Location = new System.Drawing.Point(8, 329);
+            this.buttonDonate.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonDonate.Name = "buttonDonate";
+            this.buttonDonate.Size = new System.Drawing.Size(75, 23);
+            this.buttonDonate.TabIndex = 5;
+            this.buttonDonate.Text = "Donate";
+            this.buttonDonate.UseVisualStyleBackColor = true;
+            // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -95,9 +107,17 @@
             this.buttonRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
-            this.buttonRefresh.TabIndex = 0;
+            this.buttonRefresh.TabIndex = 2;
             this.buttonRefresh.Text = "Refresh";
             this.buttonRefresh.UseVisualStyleBackColor = true;
+            // 
+            // columnAcceleration
+            // 
+            this.columnAcceleration.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.columnAcceleration.HeaderText = "Acceleration";
+            this.columnAcceleration.Name = "columnAcceleration";
+            this.columnAcceleration.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnAcceleration.Width = 72;
             // 
             // columnActive
             // 
@@ -108,14 +128,6 @@
             this.columnActive.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.columnActive.Width = 43;
             // 
-            // columnAcceleration
-            // 
-            this.columnAcceleration.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.columnAcceleration.HeaderText = "Acceleration";
-            this.columnAcceleration.Name = "columnAcceleration";
-            this.columnAcceleration.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnAcceleration.Width = 72;
-            // 
             // columnName
             // 
             this.columnName.HeaderText = "Profile name";
@@ -124,8 +136,8 @@
             // columnSpeed
             // 
             this.columnSpeed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle1;
             this.columnSpeed.HeaderText = "Speed";
             this.columnSpeed.Name = "columnSpeed";
             this.columnSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -140,14 +152,14 @@
             this.dataGridViewProfiles.AutoGenerateColumns = false;
             this.dataGridViewProfiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewProfiles.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewProfiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewProfiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnActive,
@@ -163,7 +175,7 @@
             this.dataGridViewProfiles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewProfiles.ShowEditingIcon = false;
             this.dataGridViewProfiles.Size = new System.Drawing.Size(444, 209);
-            this.dataGridViewProfiles.TabIndex = 4;
+            this.dataGridViewProfiles.TabIndex = 1;
             // 
             // groupBoxCurrent
             // 
@@ -185,8 +197,8 @@
             // 
             // groupBoxProfiles
             // 
-            this.groupBoxProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxProfiles.Controls.Add(this.dataGridViewProfiles);
             this.groupBoxProfiles.Location = new System.Drawing.Point(8, 8);
@@ -205,7 +217,7 @@
             this.labelAcceleration.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
             this.labelAcceleration.Name = "labelAcceleration";
             this.labelAcceleration.Size = new System.Drawing.Size(69, 13);
-            this.labelAcceleration.TabIndex = 6;
+            this.labelAcceleration.TabIndex = 1;
             this.labelAcceleration.Text = "Acceleration:";
             // 
             // labelSpeed
@@ -215,7 +227,7 @@
             this.labelSpeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
             this.labelSpeed.Name = "labelSpeed";
             this.labelSpeed.Size = new System.Drawing.Size(41, 13);
-            this.labelSpeed.TabIndex = 5;
+            this.labelSpeed.TabIndex = 0;
             this.labelSpeed.Text = "Speed:";
             // 
             // textBoxAcceleration
@@ -225,7 +237,7 @@
             this.textBoxAcceleration.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxAcceleration.Name = "textBoxAcceleration";
             this.textBoxAcceleration.Size = new System.Drawing.Size(100, 20);
-            this.textBoxAcceleration.TabIndex = 8;
+            this.textBoxAcceleration.TabIndex = 1;
             this.textBoxAcceleration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBoxSpeed
@@ -235,7 +247,7 @@
             this.textBoxSpeed.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSpeed.Name = "textBoxSpeed";
             this.textBoxSpeed.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSpeed.TabIndex = 7;
+            this.textBoxSpeed.TabIndex = 0;
             this.textBoxSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // ProfileForm
@@ -247,18 +259,20 @@
             this.ClientSize = new System.Drawing.Size(480, 360);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.buttonCancel);
+            this.Controls.Add(this.buttonDonate);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.groupBoxCurrent);
             this.Controls.Add(this.groupBoxProfiles);
             this.Name = "ProfileForm";
             this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Gonzales";
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProfiles)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).EndInit();
             this.groupBoxCurrent.ResumeLayout(false);
             this.groupBoxCurrent.PerformLayout();
             this.groupBoxProfiles.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProfiles)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -266,6 +280,7 @@
         private System.Windows.Forms.BindingSource bindingSourceProfiles;
         private System.Windows.Forms.Button buttonApply;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonDonate;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonRefresh;
         private System.Windows.Forms.DataGridViewCheckBoxColumn columnActive;

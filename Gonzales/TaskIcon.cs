@@ -25,13 +25,16 @@ namespace martindes01.Gonzales
             toolStripMenuItems = new ToolStripItem[]
             {
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Configure profiles", null, new EventHandler(ShowProfileForm)),
-                new ToolStripMenuItem("Exit " + Application.ProductName, null, new EventHandler(Exit)),
+                new ToolStripMenuItem("Con&figure profiles", null, ToolStripMenuItemProfiles_Click),
+                new ToolStripMenuItem("&Donate", null, ToolStripMenuItemDonate_Click),
+                new ToolStripSeparator(),
+                new ToolStripMenuItem("E&xit", null, ToolStripMenuItemExit_Click),
             };
 
             // Assign event handlers
             contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
             contextMenuStrip.Opening += ContextMenuStrip_Opening;
+            notifyIcon.MouseClick += NotifyIcon_MouseClick;
 
             // Initialise and show task icon
             notifyIcon.ContextMenuStrip = contextMenuStrip;
@@ -42,21 +45,21 @@ namespace martindes01.Gonzales
             // Show profile form if requested
             if (showProfileForm)
             {
-                ShowProfileForm(this, EventArgs.Empty);
+                ShowProfileForm();
             }
         }
 
 
         // Helper functions
 
-        private void Exit(object sender, EventArgs e)
+        private void Exit()
         {
             // Remove icon and exit
             notifyIcon.Visible = false;
             Application.Exit();
         }
 
-        private void ShowProfileForm(object sender, EventArgs e)
+        private void ShowProfileForm()
         {
             // Show form as dialog or activate and give focus if already visible
             if (profileForm.Visible)
@@ -120,6 +123,33 @@ namespace martindes01.Gonzales
 
             // Add final items
             contextMenuStrip.Items.AddRange(toolStripMenuItems);
+        }
+
+        private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            // Show profile form on notify icon left click
+            if (e.Button == MouseButtons.Left)
+            {
+                ShowProfileForm();
+            }
+        }
+
+        private void ToolStripMenuItemDonate_Click(object sender, EventArgs e)
+        {
+            // Follow donation link
+            Program.Donate();
+        }
+
+        private void ToolStripMenuItemExit_Click(object sender, EventArgs e)
+        {
+            // Exit application
+            Exit();
+        }
+
+        private void ToolStripMenuItemProfiles_Click(object sender, EventArgs e)
+        {
+            // Show profile form
+            ShowProfileForm();
         }
 
     }

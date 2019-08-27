@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;  //
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;  //
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,11 +14,17 @@ namespace martindes01.Gonzales
         // Fields
 
         private static bool startup;
+        private static readonly string donationURL = "https://www.paypal.me/martindes01";
         private static readonly string startupCommand = "--startup";
         private static readonly string startupRegistryKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
 
         // Methods
+
+        public static void Donate()
+        {
+            Process.Start(donationURL);
+        }
 
         /// <summary>
         /// The main entry point for the application.

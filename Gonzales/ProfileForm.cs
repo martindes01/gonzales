@@ -40,6 +40,7 @@ namespace martindes01.Gonzales
             FormClosing += ProfileForm_FormClosing;
             buttonApply.Click += ButtonApply_Click;
             buttonCancel.Click += ButtonCancel_Click;
+            buttonDonate.Click += ButtonDonate_Click; ;
             buttonOK.Click += ButtonOK_Click;
             buttonRefresh.Click += ButtonRefresh_Click;
             dataGridViewProfiles.CellClick += DataGridViewProfiles_CellClick;
@@ -154,6 +155,12 @@ namespace martindes01.Gonzales
             // Restore fallback profile and close form
             fallbackProfile.Apply();
             Close();
+        }
+
+        private void ButtonDonate_Click(object sender, EventArgs e)
+        {
+            // Follow donation link
+            Program.Donate();
         }
 
         private void ButtonOK_Click(object sender, EventArgs e)
