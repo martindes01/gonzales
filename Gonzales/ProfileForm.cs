@@ -85,11 +85,12 @@ namespace martindes01.Gonzales
             return value != null && (bool)value;
         }
 
-        public bool IsRowIndexValid(int rowIndex)
+        public bool IsRowIndexValid(int rowIndex, bool allowNewRow)
         {
             // Return true if row index within bounds and not new row
-            return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count;
+            //return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count;
             //return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count && !dataGridViewProfiles.Rows[rowIndex].IsNewRow;
+            return rowIndex >= 0 && rowIndex < dataGridViewProfiles.Rows.Count && (allowNewRow || !dataGridViewProfiles.Rows[rowIndex].IsNewRow);
         }
 
         public void NumberRows()
@@ -190,7 +191,7 @@ namespace martindes01.Gonzales
         private void DataGridViewProfiles_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // Check row index valid
-            if (IsRowIndexValid(e.RowIndex))
+            if (IsRowIndexValid(e.RowIndex, false))
             {
                 // Set cell true if profile activation column clicked
                 if (e.ColumnIndex == columnActive.Index)
@@ -206,7 +207,7 @@ namespace martindes01.Gonzales
         private void DataGridViewProfiles_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
             // Check rows have been drawn and cell is in profile activation column
-            if (IsRowIndexValid(e.RowIndex) && e.ColumnIndex == columnActive.Index)
+            if (IsRowIndexValid(e.RowIndex, true) && e.ColumnIndex == columnActive.Index)
             {
                 // Print cell background without selection highlight
                 e.PaintBackground(e.ClipBounds, false);
@@ -234,7 +235,7 @@ namespace martindes01.Gonzales
         private void DataGridViewProfiles_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             // Check row index valid
-            if (IsRowIndexValid(e.RowIndex))
+            if (IsRowIndexValid(e.RowIndex, false))
             {
                 // Handle value changes
                 if (e.ColumnIndex == columnActive.Index)
@@ -255,10 +256,8 @@ namespace martindes01.Gonzales
                 else if (e.ColumnIndex == columnName.Index)
                 {
                     // Trim whitespace from profile name
-                    if (dataGridViewProfiles.Rows[e.RowIndex].Cells[columnName.Index] is DataGridViewTextBoxCell cell)
-                    {
-                        cell.Value = cell.Value.ToString().Trim();
-                    }
+                    DataGridViewCell cell = dataGridViewProfiles.Rows[e.RowIndex].Cells[columnName.Index];
+                    cell.Value = cell.Value != null ? cell.Value.ToString().Trim() : "";
                 }
                 else if (e.ColumnIndex == columnSpeed.Index)
                 {

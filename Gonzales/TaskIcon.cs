@@ -77,19 +77,25 @@ namespace martindes01.Gonzales
 
         private void ContextMenuStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            // Check item name property defined
+            // Check item is a profile item with name property defined
             if (e.ClickedItem.Name != "")
             {
-                try
+                // Check index within range
+                int index = int.Parse(e.ClickedItem.Name);
+                if (index < ProfileManager.Profiles.Count)
                 {
                     // Apply profile specified by index stored in name property
                     ProfileManager.Profiles[int.Parse(e.ClickedItem.Name)].Apply();
+
+                    // Reflect active profile change on profileform
+                    profileForm.RefreshCurrentSettings();
+                    profileForm.ShowActiveProfiles();
                 }
-                catch (Exception)
+                else
                 {
                     // Display error message
-                    string message = "This profile has been renamed or deleted since opening the menu.";
-                    message += " Don't worry, just reopen the menu and try again.";
+                    string message = "Some profiles may have deleted since the menu was last opened.";
+                    message += " Don't worry, just open the menu to refresh it and try again.";
                     MessageBox.Show(message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -111,10 +117,10 @@ namespace martindes01.Gonzales
                 Profile profile = ProfileManager.Profiles[i];
 
                 // Include the index as the name property of the item for identification
-                string text = profile.Name.Trim() == "" ? "Untitled profile" : profile.Name.Trim();
+                string text = (profile.Name == null || profile.Name.Trim() == "") ? "Untitled profile" : profile.Name.Trim();
                 contextMenuStrip.Items.Add(new ToolStripMenuItem(text, null, null, i.ToString()));
 
-                // Check item if assoicated profile is active
+                // Check item if associated profile is active
                 if (contextMenuStrip.Items[i] is ToolStripMenuItem item)
                 {
                     item.Checked = profile.Speed == speed && profile.Acceleration == acceleration;
