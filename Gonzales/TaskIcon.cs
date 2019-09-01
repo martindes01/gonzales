@@ -14,6 +14,7 @@ namespace martindes01.Gonzales
 
         private readonly ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         private readonly NotifyIcon notifyIcon = new NotifyIcon();
+        private readonly OptionsForm optionsForm = new OptionsForm();
         private readonly ProfileForm profileForm = new ProfileForm();
         private readonly ToolStripItem[] toolStripMenuItemsBottom;
         private readonly ToolStripItem[] toolStripMenuItemsTop;
@@ -57,7 +58,7 @@ namespace martindes01.Gonzales
             // Show profile form if requested
             if (showProfileForm)
             {
-                ShowProfileForm();
+                Program.ShowFormAsDialog(profileForm);
             }
         }
 
@@ -69,27 +70,6 @@ namespace martindes01.Gonzales
             // Remove icon and exit
             notifyIcon.Visible = false;
             Application.Exit();
-        }
-
-        private void ShowProfileForm()
-        {
-            // Show profile form as dialog or activate and give focus if already visible
-            if (profileForm.Visible)
-            {
-                // Set window state to normal if minimised
-                if (profileForm.WindowState == FormWindowState.Minimized)
-                {
-                    profileForm.WindowState = FormWindowState.Normal;
-                }
-
-                // Activate form and give focus
-                profileForm.Activate();
-            }
-            else
-            {
-                // Show form as dialog
-                profileForm.ShowDialog();
-            }
         }
 
 
@@ -175,7 +155,7 @@ namespace martindes01.Gonzales
             // Show profile form on notify icon left click
             if (e.Button == MouseButtons.Left)
             {
-                ShowProfileForm();
+                Program.ShowFormAsDialog(profileForm);
             }
         }
 
@@ -198,13 +178,15 @@ namespace martindes01.Gonzales
 
         private void ToolStripMenuItemOptions_Click(object sender, EventArgs e)
         {
-            // TODO
+            // Show options form
+            optionsForm.RefreshStartupChecked();
+            Program.ShowFormAsDialog(optionsForm);
         }
 
         private void ToolStripMenuItemProfiles_Click(object sender, EventArgs e)
         {
             // Show profile form
-            ShowProfileForm();
+            Program.ShowFormAsDialog(profileForm);
         }
 
     }

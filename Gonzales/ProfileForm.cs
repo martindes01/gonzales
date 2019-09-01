@@ -15,8 +15,9 @@ namespace martindes01.Gonzales
     public partial class ProfileForm : Form
     {
 
-        // Field
+        // Fields
 
+        private readonly OptionsForm optionsForm = new OptionsForm();
         private Profile fallbackProfile;
 
 
@@ -29,6 +30,7 @@ namespace martindes01.Gonzales
 
             // Initialise form (designer code)
             InitializeComponent();
+            Text = Application.ProductName;
 
             // Initialise data grid
             DataGridViewProfiles();
@@ -79,6 +81,12 @@ namespace martindes01.Gonzales
             columnName.DataPropertyName = "Name";
             columnSpeed.DataPropertyName = "Speed";
             columnAcceleration.DataPropertyName = "Acceleration";
+
+            // Set tooltips
+            columnActive.ToolTipText = "Indicates whether a profile is active. Click a cell to activate the corresponding profile.";
+            columnName.ToolTipText = "Choose a memorable name for this profile.";
+            columnSpeed.ToolTipText = "An integer from 1 to 20, inclusive, that indicates the speed of the mouse pointer.";
+            columnAcceleration.ToolTipText = "If enabled, faster mouse movements will cause the mouse pointer to move further.";
 
             // Hide row header content
             dataGridViewProfiles.RowHeadersDefaultCellStyle.Padding = new Padding(dataGridViewProfiles.RowHeadersWidth / 2);
@@ -369,7 +377,8 @@ namespace martindes01.Gonzales
 
         private void ToolStripMenuItemOptions_Click(object sender, EventArgs e)
         {
-            // TODO
+            // Show options form
+            Program.ShowFormAsDialog(optionsForm);
         }
 
     }

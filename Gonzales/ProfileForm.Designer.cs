@@ -137,16 +137,18 @@
             // 
             this.columnName.HeaderText = "Profile name";
             this.columnName.Name = "columnName";
+            this.columnName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // columnSpeed
             // 
             this.columnSpeed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle2;
             this.columnSpeed.HeaderText = "Speed";
             this.columnSpeed.Name = "columnSpeed";
             this.columnSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.columnSpeed.Width = 64;
+            this.columnSpeed.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.columnSpeed.Width = 45;
             // 
             // dataGridViewProfiles
             // 
@@ -157,14 +159,14 @@
             this.dataGridViewProfiles.AutoGenerateColumns = false;
             this.dataGridViewProfiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewProfiles.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewProfiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewProfiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnActive,
@@ -202,8 +204,8 @@
             // 
             // groupBoxProfiles
             // 
-            this.groupBoxProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxProfiles.Controls.Add(this.dataGridViewProfiles);
             this.groupBoxProfiles.Location = new System.Drawing.Point(8, 36);
@@ -306,6 +308,7 @@
             this.MainMenuStrip = this.menuStripMain;
             this.Name = "ProfileForm";
             this.Padding = new System.Windows.Forms.Padding(4);
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Gonzales";
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProfiles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).EndInit();
@@ -316,7 +319,6 @@
             this.menuStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
@@ -327,8 +329,8 @@
         private System.Windows.Forms.Button buttonDonate;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonRefresh;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn columnActive;
         private System.Windows.Forms.DataGridViewCheckBoxColumn columnAcceleration;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn columnActive;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnName;
         private System.Windows.Forms.DataGridViewTextBoxColumn columnSpeed;
         private System.Windows.Forms.DataGridView dataGridViewProfiles;

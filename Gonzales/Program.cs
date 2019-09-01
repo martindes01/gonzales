@@ -17,7 +17,9 @@ namespace martindes01.Gonzales
         private static bool startup;
         private static readonly string donationURL = "https://www.paypal.me/martindes01";
         private static readonly string startupCommand = "--startup";
-        private static readonly string startupRegistryKeyPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
+        private static readonly string startupRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+        private static readonly string startupRegistryKeySubkeyName = Application.CompanyName + Application.ProductName;
+        private static readonly string startupRegistryKeySubkeyValue = "\"" + Application.ExecutablePath + "\" " + startupCommand;
 
         private static Mutex mutex;
 
@@ -26,8 +28,60 @@ namespace martindes01.Gonzales
 
         public static void Donate()
         {
+            // Launch URL in system default browser
             Process.Start(donationURL);
         }
+
+        public static bool IsStartupEnabled()
+        {
+            // Return whether startup registry key exists
+            using (RegistryKey registryKeyStartup = Registry.CurrentUser.CreateSubKey(startupRegistryKeyPath))
+            {
+                return registryKeyStartup.GetValue(startupRegistryKeySubkeyName) != null;
+            }
+        }
+
+        public static void SetStartup(bool startup)
+        {
+            // Open startup registry key for writing
+            // Key is created if does not exist
+            using (RegistryKey registryKeyStartup = Registry.CurrentUser.CreateSubKey(startupRegistryKeyPath))
+            {
+                // Set or delete key as requested
+                if (startup)
+                {
+                    registryKeyStartup.SetValue(startupRegistryKeySubkeyName, startupRegistryKeySubkeyValue);
+                }
+                else
+                {
+                    registryKeyStartup.DeleteValue(startupRegistryKeySubkeyName, false);
+                }
+            }
+        }
+
+        public static void ShowFormAsDialog(Form form)
+        {
+            // Show form as dialog or activate and give focus if already visible
+            if (form.Visible)
+            {
+                // Set window state to normal if minimised
+                if (form.WindowState == FormWindowState.Minimized)
+                {
+                    form.WindowState = FormWindowState.Normal;
+                }
+
+                // Activate form and give focus
+                form.Activate();
+            }
+            else
+            {
+                // Show form as dialog
+                form.ShowDialog();
+            }
+        }
+
+
+        // Main
 
         /// <summary>
         /// The main entry point for the application.
@@ -45,15 +99,6 @@ namespace martindes01.Gonzales
 
             // Parse command line arguments
             startup = args != null && args.Contains(startupCommand);
-
-            // Add startup registry key for current user if not launched at startup
-            if (!startup)
-            {
-                Registry.CurrentUser.OpenSubKey(startupRegistryKeyPath, true).SetValue(
-                    Application.CompanyName + " " + Application.ProductName,
-                    "\"" + Application.ExecutablePath + "\" " + startupCommand
-                );
-            }
 
             // Set application properties
             Application.EnableVisualStyles();
