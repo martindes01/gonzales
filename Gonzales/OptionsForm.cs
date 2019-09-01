@@ -21,8 +21,8 @@ namespace martindes01.Gonzales
             InitializeComponent();
 
             // Initialise startup checkbox
-            string text = "Run on system startup.";
-            text += " If enabled, this application will start minimised to the system tray at the right-hand side of the taskbar when you first log in after a shutdown or restart.";
+            string text = "Run on system &startup.";
+            text += "\n\nIf enabled, this application will start automatically with Windows and be minimised to the system tray in the taskbar.";
             checkBoxStartup.Text = text;
             RefreshStartupChecked();
 

@@ -12,6 +12,7 @@ namespace martindes01.Gonzales
 
         // Fields
 
+        private readonly AboutBox aboutBox = new AboutBox();
         private readonly ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         private readonly NotifyIcon notifyIcon = new NotifyIcon();
         private readonly OptionsForm optionsForm = new OptionsForm();
@@ -58,7 +59,7 @@ namespace martindes01.Gonzales
             // Show profile form if requested
             if (showProfileForm)
             {
-                Program.ShowFormAsDialog(profileForm);
+                Program.ShowFormAsDialog(profileForm, false);
             }
         }
 
@@ -155,13 +156,14 @@ namespace martindes01.Gonzales
             // Show profile form on notify icon left click
             if (e.Button == MouseButtons.Left)
             {
-                Program.ShowFormAsDialog(profileForm);
+                Program.ShowFormAsDialog(profileForm, false);
             }
         }
 
         private void ToolStripMenuItemAbout_Click(object sender, EventArgs e)
         {
-            // TODO
+            // Show about box
+            Program.ShowFormAsDialog(aboutBox, false);
         }
 
         private void ToolStripMenuItemDonate_Click(object sender, EventArgs e)
@@ -180,13 +182,13 @@ namespace martindes01.Gonzales
         {
             // Show options form
             optionsForm.RefreshStartupChecked();
-            Program.ShowFormAsDialog(optionsForm);
+            Program.ShowFormAsDialog(optionsForm, false);
         }
 
         private void ToolStripMenuItemProfiles_Click(object sender, EventArgs e)
         {
             // Show profile form
-            Program.ShowFormAsDialog(profileForm);
+            Program.ShowFormAsDialog(profileForm, false);
         }
 
     }

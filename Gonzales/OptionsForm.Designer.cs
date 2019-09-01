@@ -85,9 +85,12 @@
             this.MinimizeBox = false;
             this.Name = "OptionsForm";
             this.Padding = new System.Windows.Forms.Padding(4);
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
             this.ResumeLayout(false);
+
         }
 
         #endregion

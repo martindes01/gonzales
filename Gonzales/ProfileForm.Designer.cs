@@ -43,15 +43,15 @@
             this.columnSpeed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewProfiles = new System.Windows.Forms.DataGridView();
             this.groupBoxCurrent = new System.Windows.Forms.GroupBox();
-            this.groupBoxProfiles = new System.Windows.Forms.GroupBox();
             this.labelAcceleration = new System.Windows.Forms.Label();
             this.labelSpeed = new System.Windows.Forms.Label();
-            this.menuStripMain = new System.Windows.Forms.MenuStrip();
             this.textBoxAcceleration = new System.Windows.Forms.TextBox();
             this.textBoxSpeed = new System.Windows.Forms.TextBox();
+            this.groupBoxProfiles = new System.Windows.Forms.GroupBox();
+            this.menuStripMain = new System.Windows.Forms.MenuStrip();
+            this.toolStripMenuItemOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemDonate = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemOptions = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSourceProfiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProfiles)).BeginInit();
             this.groupBoxCurrent.SuspendLayout();
@@ -67,7 +67,7 @@
             this.buttonApply.Margin = new System.Windows.Forms.Padding(4);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(75, 23);
-            this.buttonApply.TabIndex = 4;
+            this.buttonApply.TabIndex = 5;
             this.buttonApply.Text = "Apply";
             this.buttonApply.UseVisualStyleBackColor = true;
             // 
@@ -79,7 +79,7 @@
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 3;
+            this.buttonCancel.TabIndex = 4;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             // 
@@ -90,7 +90,7 @@
             this.buttonDonate.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDonate.Name = "buttonDonate";
             this.buttonDonate.Size = new System.Drawing.Size(75, 23);
-            this.buttonDonate.TabIndex = 5;
+            this.buttonDonate.TabIndex = 2;
             this.buttonDonate.Text = "Donate!";
             this.buttonDonate.UseVisualStyleBackColor = true;
             // 
@@ -101,7 +101,7 @@
             this.buttonOK.Margin = new System.Windows.Forms.Padding(4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 2;
+            this.buttonOK.TabIndex = 3;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             // 
@@ -112,7 +112,7 @@
             this.buttonRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.buttonRefresh.Name = "buttonRefresh";
             this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
-            this.buttonRefresh.TabIndex = 2;
+            this.buttonRefresh.TabIndex = 4;
             this.buttonRefresh.Text = "Refresh";
             this.buttonRefresh.UseVisualStyleBackColor = true;
             // 
@@ -142,8 +142,8 @@
             // columnSpeed
             // 
             this.columnSpeed.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.columnSpeed.DefaultCellStyle = dataGridViewCellStyle1;
             this.columnSpeed.HeaderText = "Speed";
             this.columnSpeed.Name = "columnSpeed";
             this.columnSpeed.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -159,14 +159,14 @@
             this.dataGridViewProfiles.AutoGenerateColumns = false;
             this.dataGridViewProfiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewProfiles.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewProfiles.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewProfiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewProfiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.columnActive,
@@ -202,6 +202,48 @@
             this.groupBoxCurrent.TabStop = false;
             this.groupBoxCurrent.Text = "Current settings";
             // 
+            // labelAcceleration
+            // 
+            this.labelAcceleration.AutoSize = true;
+            this.labelAcceleration.Location = new System.Drawing.Point(113, 24);
+            this.labelAcceleration.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.labelAcceleration.Name = "labelAcceleration";
+            this.labelAcceleration.Size = new System.Drawing.Size(76, 15);
+            this.labelAcceleration.TabIndex = 2;
+            this.labelAcceleration.Text = "Acceleration:";
+            // 
+            // labelSpeed
+            // 
+            this.labelSpeed.AutoSize = true;
+            this.labelSpeed.Location = new System.Drawing.Point(5, 24);
+            this.labelSpeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
+            this.labelSpeed.Name = "labelSpeed";
+            this.labelSpeed.Size = new System.Drawing.Size(42, 15);
+            this.labelSpeed.TabIndex = 0;
+            this.labelSpeed.Text = "Speed:";
+            // 
+            // textBoxAcceleration
+            // 
+            this.textBoxAcceleration.Location = new System.Drawing.Point(116, 43);
+            this.textBoxAcceleration.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxAcceleration.Name = "textBoxAcceleration";
+            this.textBoxAcceleration.ReadOnly = true;
+            this.textBoxAcceleration.Size = new System.Drawing.Size(100, 23);
+            this.textBoxAcceleration.TabIndex = 3;
+            this.textBoxAcceleration.TabStop = false;
+            this.textBoxAcceleration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // textBoxSpeed
+            // 
+            this.textBoxSpeed.Location = new System.Drawing.Point(8, 43);
+            this.textBoxSpeed.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxSpeed.Name = "textBoxSpeed";
+            this.textBoxSpeed.ReadOnly = true;
+            this.textBoxSpeed.Size = new System.Drawing.Size(100, 23);
+            this.textBoxSpeed.TabIndex = 1;
+            this.textBoxSpeed.TabStop = false;
+            this.textBoxSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // groupBoxProfiles
             // 
             this.groupBoxProfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -216,26 +258,6 @@
             this.groupBoxProfiles.TabIndex = 0;
             this.groupBoxProfiles.TabStop = false;
             this.groupBoxProfiles.Text = "Profiles";
-            // 
-            // labelAcceleration
-            // 
-            this.labelAcceleration.AutoSize = true;
-            this.labelAcceleration.Location = new System.Drawing.Point(113, 24);
-            this.labelAcceleration.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
-            this.labelAcceleration.Name = "labelAcceleration";
-            this.labelAcceleration.Size = new System.Drawing.Size(76, 15);
-            this.labelAcceleration.TabIndex = 1;
-            this.labelAcceleration.Text = "Acceleration:";
-            // 
-            // labelSpeed
-            // 
-            this.labelSpeed.AutoSize = true;
-            this.labelSpeed.Location = new System.Drawing.Point(5, 24);
-            this.labelSpeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 0);
-            this.labelSpeed.Name = "labelSpeed";
-            this.labelSpeed.Size = new System.Drawing.Size(42, 15);
-            this.labelSpeed.TabIndex = 0;
-            this.labelSpeed.Text = "Speed:";
             // 
             // menuStripMain
             // 
@@ -252,25 +274,11 @@
             this.menuStripMain.TabIndex = 6;
             this.menuStripMain.Text = "menuStripMain";
             // 
-            // textBoxAcceleration
+            // toolStripMenuItemOptions
             // 
-            this.textBoxAcceleration.Enabled = false;
-            this.textBoxAcceleration.Location = new System.Drawing.Point(116, 43);
-            this.textBoxAcceleration.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxAcceleration.Name = "textBoxAcceleration";
-            this.textBoxAcceleration.Size = new System.Drawing.Size(100, 23);
-            this.textBoxAcceleration.TabIndex = 1;
-            this.textBoxAcceleration.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // textBoxSpeed
-            // 
-            this.textBoxSpeed.Enabled = false;
-            this.textBoxSpeed.Location = new System.Drawing.Point(8, 43);
-            this.textBoxSpeed.Margin = new System.Windows.Forms.Padding(4);
-            this.textBoxSpeed.Name = "textBoxSpeed";
-            this.textBoxSpeed.Size = new System.Drawing.Size(100, 23);
-            this.textBoxSpeed.TabIndex = 0;
-            this.textBoxSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolStripMenuItemOptions.Name = "toolStripMenuItemOptions";
+            this.toolStripMenuItemOptions.Size = new System.Drawing.Size(61, 20);
+            this.toolStripMenuItemOptions.Text = "&Options";
             // 
             // toolStripMenuItemAbout
             // 
@@ -283,12 +291,6 @@
             this.toolStripMenuItemDonate.Name = "toolStripMenuItemDonate";
             this.toolStripMenuItemDonate.Size = new System.Drawing.Size(60, 20);
             this.toolStripMenuItemDonate.Text = "&Donate!";
-            // 
-            // toolStripMenuItemOptions
-            // 
-            this.toolStripMenuItemOptions.Name = "toolStripMenuItemOptions";
-            this.toolStripMenuItemOptions.Size = new System.Drawing.Size(61, 20);
-            this.toolStripMenuItemOptions.Text = "&Options";
             // 
             // ProfileForm
             // 
@@ -319,6 +321,7 @@
             this.menuStripMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

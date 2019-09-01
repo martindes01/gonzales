@@ -17,7 +17,9 @@ namespace martindes01.Gonzales
 
         // Fields
 
+        private readonly AboutBox aboutBox = new AboutBox();
         private readonly OptionsForm optionsForm = new OptionsForm();
+
         private Profile fallbackProfile;
 
 
@@ -366,7 +368,8 @@ namespace martindes01.Gonzales
 
         private void ToolStripMenuItemAbout_Click(object sender, EventArgs e)
         {
-            // TODO
+            // Show about box
+            Program.ShowFormAsDialog(aboutBox, true);
         }
 
         private void ToolStripMenuItemDonate_Click(object sender, EventArgs e)
@@ -378,7 +381,7 @@ namespace martindes01.Gonzales
         private void ToolStripMenuItemOptions_Click(object sender, EventArgs e)
         {
             // Show options form
-            Program.ShowFormAsDialog(optionsForm);
+            Program.ShowFormAsDialog(optionsForm, true);
         }
 
     }

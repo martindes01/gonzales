@@ -59,7 +59,7 @@ namespace martindes01.Gonzales
             }
         }
 
-        public static void ShowFormAsDialog(Form form)
+        public static void ShowFormAsDialog(Form form, bool isChild)
         {
             // Show form as dialog or activate and give focus if already visible
             if (form.Visible)
@@ -75,6 +75,16 @@ namespace martindes01.Gonzales
             }
             else
             {
+                // Set form start position
+                if (isChild)
+                {
+                    form.StartPosition = FormStartPosition.CenterParent;
+                }
+                else
+                {
+                    form.StartPosition = FormStartPosition.CenterScreen;
+                }
+
                 // Show form as dialog
                 form.ShowDialog();
             }
