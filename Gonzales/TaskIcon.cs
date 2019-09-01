@@ -15,32 +15,44 @@ namespace martindes01.Gonzales
         private readonly ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         private readonly NotifyIcon notifyIcon = new NotifyIcon();
         private readonly ProfileForm profileForm = new ProfileForm();
-        private readonly ToolStripItem[] toolStripMenuItems;
+        private readonly ToolStripItem[] toolStripMenuItemsBottom;
+        private readonly ToolStripItem[] toolStripMenuItemsTop;
 
 
         // Constructors
 
         public TaskIcon(bool showProfileForm) {
+            // Initialise context menu
+            contextMenuStrip.RenderMode = ToolStripRenderMode.System;
+
+            // Initialise toolstrip items to display at top of context menu
+            toolStripMenuItemsTop = new ToolStripItem[]
+            {
+                new ToolStripMenuItem("Con&figure profiles...", null, ToolStripMenuItemProfiles_Click),
+                new ToolStripSeparator(),
+            };
+
             // Initialise toolstrip items to display at bottom of context menu
-            toolStripMenuItems = new ToolStripItem[]
+            toolStripMenuItemsBottom = new ToolStripItem[]
             {
                 new ToolStripSeparator(),
-                new ToolStripMenuItem("Con&figure profiles", null, ToolStripMenuItemProfiles_Click),
-                new ToolStripMenuItem("&Donate", null, ToolStripMenuItemDonate_Click),
+                new ToolStripMenuItem("&Options...", null, ToolStripMenuItemOptions_Click),
+                new ToolStripMenuItem("&About " + Application.ProductName + "...", null, ToolStripMenuItemAbout_Click),
+                new ToolStripMenuItem("&Donate!", null, ToolStripMenuItemDonate_Click),
                 new ToolStripSeparator(),
                 new ToolStripMenuItem("E&xit", null, ToolStripMenuItemExit_Click),
             };
-
-            // Assign event handlers
-            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
-            contextMenuStrip.Opening += ContextMenuStrip_Opening;
-            notifyIcon.MouseClick += NotifyIcon_MouseClick;
 
             // Initialise and show task icon
             notifyIcon.ContextMenuStrip = contextMenuStrip;
             notifyIcon.Icon = profileForm.Icon;
             notifyIcon.Text = Application.ProductName;
             notifyIcon.Visible = true;
+
+            // Assign event handlers
+            contextMenuStrip.ItemClicked += ContextMenuStrip_ItemClicked;
+            contextMenuStrip.Opening += ContextMenuStrip_Opening;
+            notifyIcon.MouseClick += NotifyIcon_MouseClick;
 
             // Show profile form if requested
             if (showProfileForm)
@@ -61,13 +73,21 @@ namespace martindes01.Gonzales
 
         private void ShowProfileForm()
         {
-            // Show form as dialog or activate and give focus if already visible
+            // Show profile form as dialog or activate and give focus if already visible
             if (profileForm.Visible)
             {
+                // Set window state to normal if minimised
+                if (profileForm.WindowState == FormWindowState.Minimized)
+                {
+                    profileForm.WindowState = FormWindowState.Normal;
+                }
+
+                // Activate form and give focus
                 profileForm.Activate();
             }
             else
             {
+                // Show form as dialog
                 profileForm.ShowDialog();
             }
         }
@@ -110,25 +130,44 @@ namespace martindes01.Gonzales
             // Remove old items
             contextMenuStrip.Items.Clear();
 
-            // Add an item for each mouse profile
+            // Add top items
+            contextMenuStrip.Items.AddRange(toolStripMenuItemsTop);
+
+            // Check whether mouse profiles exist
             ProfileManager.LoadProfiles();
-            for (int i = 0; i < ProfileManager.Profiles.Count; i++)
+            if (ProfileManager.Profiles.Count > 0)
             {
-                Profile profile = ProfileManager.Profiles[i];
+                // Store number of items at top of menu for use as index shift correction
+                int shift = toolStripMenuItemsTop.Count();
 
-                // Include the index as the name property of the item for identification
-                string text = (profile.Name == null || profile.Name.Trim() == "") ? "Untitled profile" : profile.Name.Trim();
-                contextMenuStrip.Items.Add(new ToolStripMenuItem(text, null, null, i.ToString()));
-
-                // Check item if associated profile is active
-                if (contextMenuStrip.Items[i] is ToolStripMenuItem item)
+                // Add an item for each mouse profile
+                for (int i = 0; i < ProfileManager.Profiles.Count; i++)
                 {
-                    item.Checked = profile.Speed == speed && profile.Acceleration == acceleration;
+                    Profile profile = ProfileManager.Profiles[i];
+
+                    // Include the index as the name property of the item for identification
+                    string text = (profile.Name == null || profile.Name.Trim() == "") ? "Untitled profile" : profile.Name.Trim();
+                    contextMenuStrip.Items.Add(new ToolStripMenuItem(text, null, null, i.ToString()));
+
+                    // Check item if associated profile is active
+                    if (contextMenuStrip.Items[shift + i] is ToolStripMenuItem item)
+                    {
+                        item.Checked = profile.Speed == speed && profile.Acceleration == acceleration;
+                    }
                 }
             }
+            else
+            {
+                // Add item with useful message
+                contextMenuStrip.Items.Add(new ToolStripMenuItem("No saved profiles", null));
+            }
 
-            // Add final items
-            contextMenuStrip.Items.AddRange(toolStripMenuItems);
+            // Add bottom items
+            contextMenuStrip.Items.AddRange(toolStripMenuItemsBottom);
+
+            // Set cancel to false
+            // By default this is set to true for optimisation if unspecified
+            e.Cancel = false;
         }
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
@@ -138,6 +177,11 @@ namespace martindes01.Gonzales
             {
                 ShowProfileForm();
             }
+        }
+
+        private void ToolStripMenuItemAbout_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void ToolStripMenuItemDonate_Click(object sender, EventArgs e)
@@ -150,6 +194,11 @@ namespace martindes01.Gonzales
         {
             // Exit application
             Exit();
+        }
+
+        private void ToolStripMenuItemOptions_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
         private void ToolStripMenuItemProfiles_Click(object sender, EventArgs e)

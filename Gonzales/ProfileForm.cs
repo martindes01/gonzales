@@ -33,6 +33,9 @@ namespace martindes01.Gonzales
             // Initialise data grid
             DataGridViewProfiles();
 
+            // Initialise menu strip
+            toolStripMenuItemAbout.Text = "&About " + Application.ProductName;
+
             // Display current mouse settings
             RefreshCurrentSettings();
 
@@ -52,6 +55,9 @@ namespace martindes01.Gonzales
             dataGridViewProfiles.RowPostPaint += DataGridViewProfiles_RowPostPaint;
             dataGridViewProfiles.RowsAdded += DataGridViewProfiles_RowsAdded;
             dataGridViewProfiles.RowsRemoved += DataGridViewProfiles_RowsRemoved;
+            toolStripMenuItemAbout.Click += ToolStripMenuItemAbout_Click;
+            toolStripMenuItemDonate.Click += ToolStripMenuItemDonate_Click;
+            toolStripMenuItemOptions.Click += ToolStripMenuItemOptions_Click;
 
             // Load saved profiles and reset bindings for data grid
             ProfileManager.LoadProfiles();
@@ -348,6 +354,22 @@ namespace martindes01.Gonzales
         {
             // Number each row
             NumberRows();
+        }
+
+        private void ToolStripMenuItemAbout_Click(object sender, EventArgs e)
+        {
+            // TODO
+        }
+
+        private void ToolStripMenuItemDonate_Click(object sender, EventArgs e)
+        {
+            // Follow donation link
+            Program.Donate();
+        }
+
+        private void ToolStripMenuItemOptions_Click(object sender, EventArgs e)
+        {
+            // TODO
         }
 
     }
