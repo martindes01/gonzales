@@ -45,7 +45,8 @@ namespace martindes01.Gonzales
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                return Application.ProductVersion;
+                //return Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 

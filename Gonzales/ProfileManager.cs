@@ -20,7 +20,7 @@ namespace martindes01.Gonzales
 
         // Fields
         
-        private static readonly string filePath = Path.Combine(Application.UserAppDataPath, "profiles.json");
+        private static readonly string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.CompanyName, Application.ProductName, "profiles.json");
 
         private static readonly JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
 

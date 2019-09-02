@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ICE69 warning can be ignored since referenced executable file is always installed -->
+<!-- See https://docs.microsoft.com/en-us/windows/win32/msi/ice69 -->
+<!-- ICE91 error supressed since this is a per user only installation -->
+<!-- See https://docs.microsoft.com/en-us/windows/win32/msi/ice91 -->
+
+<!-- Variables for unformatted properties -->
+<?define AssemblyFileVersion = "!(bind.FileVersion.MainExecutableFile)"?>
+<?define CompanyName = "martindes01" ?>
+<?define ProductName = "Gonzales" ?>
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+	<!-- This element creates an msi file -->
+  <Product Id="*" UpgradeCode="61d30396-58a4-4727-8680-e015a1e66d0d" Version="$(var.AssemblyFileVersion)" Language="1033" Name="$(var.ProductName)" Manufacturer="$(var.CompanyName)">
+    
+    <!-- Properties about package to be placed in Summary Information Stream -->
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" Comments="Copyright © martindes01 2019" />
+
+    <!-- If installation of upgrade product fails, roll back removal of installed product -->
+		<MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		
+    <!-- Instruct binder to embed cabinets in product -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Define directory structure -->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- The full path to the Roaming folder for the current user -->
+      <Directory Id="AppDataFolder">
+        <Directory Id="AppDataManufacturerFolder" Name="[Manufacturer]">
+				  <Directory Id="APPLICATIONROOTDIRECTORY" Name="[ProductName]" />
+        </Directory>
+			</Directory>
+      <!-- The full path to the Program Menu folder -->
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuAppFolder" Name="[Manufacturer] [ProductName]" />
+      </Directory>
+		</Directory>
+
+    <!-- Add components to package -->
+    <!-- Root components -->
+    <DirectoryRef Id="TARGETDIR">
+      <!-- Registry key to run program on system startup -->
+			<Component Id="StartupRegistryKey" Guid="*">
+        <RegistryValue Root="HKCU" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\Run" Name="[Manufacturer][ProductName]" Type="string" Value="&quot;[#MainExecutableFile]&quot; --startup" KeyPath="yes" />
+			</Component>
+    </DirectoryRef>
+    <!-- Installation folder components -->
+    <DirectoryRef Id="APPLICATIONROOTDIRECTORY">
+      <!-- App executable file -->
+      <!-- Components with files and registry keypaths cannot use auto generated guids -->
+			<Component Id="MainExecutable" Guid="7B5C17F8-BB13-43CB-8F49-543F4612D35F">
+        <File Id="MainExecutableFile" Source="$(var.Gonzales.TargetPath)" Checksum="yes" />
+        <!-- Remove app data folders on uninstall (only if empty) -->
+        <RemoveFolder Id="RemoveApplicationRootDirectory" Directory="APPLICATIONROOTDIRECTORY" On="uninstall"/>
+        <RemoveFolder Id="RemoveAppDataManufacturerFolder" Directory="AppDataManufacturerFolder" On="uninstall"/>
+        <!-- Registry key to act as key path for this component -->
+        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]\Components" Name="MainExecutable" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+    </DirectoryRef>
+    <!-- Start menu components -->
+    <DirectoryRef Id="ProgramMenuAppFolder">
+      <!-- Start menu items -->
+      <Component Id="StartMenuItems" Guid="*">
+        <Shortcut Id="StartMenuAppShortcut" Name="[ProductName]" Description="Create and manage mouse pointer profiles" Target="[#MainExecutableFile]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
+        <Shortcut Id="StartMenuUninstallShortcut" Name="Uninstall [ProductName]" Description="Uninstalls [ProductName]" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" />
+        <util:InternetShortcut Id="StartMenuDonationShortcut" Name="Donate" Type="url" Target="https://www.paypal.me/martindes01" />
+        <!-- Remove start menu app folder on uninstall (only if empty) -->
+        <RemoveFolder Id="RemoveProgramMenuAppFolder" Directory="ProgramMenuAppFolder" On="uninstall"/>
+        <!-- Registry key to act as key path for this component -->
+        <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]\Components" Name="StartMenuItems" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Instruct WiX to install the components -->
+    <Feature Id="MainApplication" Title="Main Application" Level="1">
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="StartMenuItems" />
+      <ComponentRef Id="StartupRegistryKey" />
+    </Feature>
+    
+    <!-- Include application launch custom action -->
+    <Property Id="WixShellExecTarget" Value="[#MainExecutableFile]" />
+    <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    
+    <!-- Add UI to installer -->
+    <!-- See https://wixtoolset.org//documentation/manual/v3/wixui/dialog_reference/wixui_installdir.html -->
+    <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProductName)" />
+    <UI>
+      <UIRef Id="WixUI_InstallDir" />
+      <!-- Trigger application launch custom action on installation exit -->
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">
+        <!-- Only run custom action if checkbox is checked and application not previouly installed -->
+        WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+    </UI>
+	  
+  </Product>
+</Wix>
