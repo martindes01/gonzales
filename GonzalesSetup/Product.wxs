@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- ICE61 warning can be ignored since same version upgrades used for testing only -->
+<!-- See https://docs.microsoft.com/en-us/windows/win32/msi/ice61 -->
 <!-- ICE69 warning can be ignored since referenced executable file is always installed -->
 <!-- See https://docs.microsoft.com/en-us/windows/win32/msi/ice69 -->
 <!-- ICE91 error supressed since this is a per user only installation -->
 <!-- See https://docs.microsoft.com/en-us/windows/win32/msi/ice91 -->
 
-<!-- Variables for unformatted properties -->
-<?define AssemblyFileVersion = "!(bind.FileVersion.MainExecutableFile)"?>
+<!-- Variables for unformatted attributes in Directory, Property, Shortcut -->
+<!--<?define AssemblyFileVersion = "!(bind.FileVersion.MainExecutableFile)"?>-->
 <?define CompanyName = "martindes01" ?>
 <?define ProductName = "Gonzales" ?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<!-- This element creates an msi file -->
-  <Product Id="*" UpgradeCode="61d30396-58a4-4727-8680-e015a1e66d0d" Version="$(var.AssemblyFileVersion)" Language="1033" Name="$(var.ProductName)" Manufacturer="$(var.CompanyName)">
+  <Product Id="*" UpgradeCode="61d30396-58a4-4727-8680-e015a1e66d0d" Version="1.0.0" Language="1033" Name="$(var.ProductName)" Manufacturer="$(var.CompanyName)">
     
     <!-- Properties about package to be placed in Summary Information Stream -->
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" Comments="Copyright © martindes01 2019" />
 
     <!-- If installation of upgrade product fails, roll back removal of installed product -->
-		<MajorUpgrade Schedule="afterInstallInitialize" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <!-- Same version upgrades used for testing only -->
+		<MajorUpgrade Schedule="afterInstallInitialize" AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		
     <!-- Instruct binder to embed cabinets in product -->
     <MediaTemplate EmbedCab="yes" />
@@ -27,13 +30,13 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
       <!-- The full path to the Roaming folder for the current user -->
       <Directory Id="AppDataFolder">
-        <Directory Id="AppDataManufacturerFolder" Name="[Manufacturer]">
-				  <Directory Id="APPLICATIONROOTDIRECTORY" Name="[ProductName]" />
+        <Directory Id="AppDataManufacturerFolder" Name="$(var.CompanyName)">
+				  <Directory Id="APPLICATIONROOTDIRECTORY" Name="$(var.ProductName)" />
         </Directory>
 			</Directory>
       <!-- The full path to the Program Menu folder -->
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ProgramMenuAppFolder" Name="[Manufacturer] [ProductName]" />
+        <Directory Id="ProgramMenuAppFolder" Name="$(var.CompanyName) $(var.ProductName)" />
       </Directory>
 		</Directory>
 
@@ -52,8 +55,8 @@
 			<Component Id="MainExecutable" Guid="7B5C17F8-BB13-43CB-8F49-543F4612D35F">
         <File Id="MainExecutableFile" Source="$(var.Gonzales.TargetPath)" Checksum="yes" />
         <!-- Remove app data folders on uninstall (only if empty) -->
-        <RemoveFolder Id="RemoveApplicationRootDirectory" Directory="APPLICATIONROOTDIRECTORY" On="uninstall"/>
-        <RemoveFolder Id="RemoveAppDataManufacturerFolder" Directory="AppDataManufacturerFolder" On="uninstall"/>
+        <RemoveFolder Id="RemoveApplicationRootDirectory" Directory="APPLICATIONROOTDIRECTORY" On="uninstall" />
+        <RemoveFolder Id="RemoveAppDataManufacturerFolder" Directory="AppDataManufacturerFolder" On="uninstall" />
         <!-- Registry key to act as key path for this component -->
         <RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]\Components" Name="MainExecutable" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
@@ -62,8 +65,7 @@
     <DirectoryRef Id="ProgramMenuAppFolder">
       <!-- Start menu items -->
       <Component Id="StartMenuItems" Guid="*">
-        <Shortcut Id="StartMenuAppShortcut" Name="[ProductName]" Description="Create and manage mouse pointer profiles" Target="[#MainExecutableFile]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
-        <Shortcut Id="StartMenuUninstallShortcut" Name="Uninstall [ProductName]" Description="Uninstalls [ProductName]" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" />
+        <Shortcut Id="StartMenuAppShortcut" Name="$(var.ProductName)" Description="Create and manage mouse pointer profiles" Target="[#MainExecutableFile]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
         <util:InternetShortcut Id="StartMenuDonationShortcut" Name="Donate" Type="url" Target="https://www.paypal.me/martindes01" />
         <!-- Remove start menu app folder on uninstall (only if empty) -->
         <RemoveFolder Id="RemoveProgramMenuAppFolder" Directory="ProgramMenuAppFolder" On="uninstall"/>
@@ -85,7 +87,9 @@
     
     <!-- Add UI to installer -->
     <!-- See https://wixtoolset.org//documentation/manual/v3/wixui/dialog_reference/wixui_installdir.html -->
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)LICENSE.rtf" />
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product.&#13;&#10;&#13;&#10;Consider supporting the developer at https://www.paypal.me/martindes01." />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProductName)" />
     <UI>
       <UIRef Id="WixUI_InstallDir" />
