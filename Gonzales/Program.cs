@@ -15,7 +15,7 @@ namespace martindes01.Gonzales
         // Fields
 
         private static bool startup;
-        private static readonly string donationURL = "https://www.paypal.me/martindes01";
+        private static readonly string donationURL = "https://www.paypal.me/martindes01/4.99";
         private static readonly string startupCommand = "--startup";
         private static readonly string startupRegistryKeyPath = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
         private static readonly string startupRegistryKeySubkeyName = Application.CompanyName + Application.ProductName;

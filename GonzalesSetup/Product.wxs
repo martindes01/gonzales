@@ -9,8 +9,10 @@
 
 <!-- Variables for unformatted attributes in Directory, Property, Shortcut -->
 <!--<?define AssemblyFileVersion = "!(bind.FileVersion.MainExecutableFile)"?>-->
-<?define CompanyName = "martindes01" ?>
-<?define ProductName = "Gonzales" ?>
+<?define CompanyName = "martindes01"?>
+<?define ProductName = "Gonzales"?>
+<?define DonationBaseURL = "https://www.paypal.me/martindes01"?>
+<?define DonationFullURL = "$(var.DonationBaseURL)/4.99"?>
 
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<!-- This element creates an msi file -->
@@ -66,7 +68,7 @@
       <!-- Start menu items -->
       <Component Id="StartMenuItems" Guid="*">
         <Shortcut Id="StartMenuAppShortcut" Name="$(var.ProductName)" Description="Create and manage mouse pointer profiles" Target="[#MainExecutableFile]" WorkingDirectory="APPLICATIONROOTDIRECTORY" />
-        <util:InternetShortcut Id="StartMenuDonationShortcut" Name="Donate" Type="url" Target="https://www.paypal.me/martindes01" />
+        <util:InternetShortcut Id="StartMenuDonationShortcut" Name="Donate" Type="url" Target="$(var.DonationFullURL)" />
         <!-- Remove start menu app folder on uninstall (only if empty) -->
         <RemoveFolder Id="RemoveProgramMenuAppFolder" Directory="ProgramMenuAppFolder" On="uninstall"/>
         <!-- Registry key to act as key path for this component -->
@@ -81,22 +83,38 @@
       <ComponentRef Id="StartupRegistryKey" />
     </Feature>
     
-    <!-- Include application launch custom action -->
-    <Property Id="WixShellExecTarget" Value="[#MainExecutableFile]" />
+    <!-- Include application launch custom actions -->
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    <CustomAction Id="LaunchBrowser" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
+    <CustomAction Id="SetWixShellExecTarget1" Property="WixShellExecTarget" Value="[#MainExecutableFile]" />
+    <CustomAction Id="SetWixShellExecTarget2" Property="WixShellExecTarget" Value="$(var.DonationFullURL)" />
     
     <!-- Add UI to installer -->
     <!-- See https://wixtoolset.org//documentation/manual/v3/wixui/dialog_reference/wixui_installdir.html -->
     <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)LICENSE.rtf" />
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" />
-    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product.&#13;&#10;&#13;&#10;Consider supporting the developer at https://www.paypal.me/martindes01." />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product. Consider supporting the developer at $(var.DonationBaseURL)." />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProductName)" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX2TEXT" Value="Donate to $(var.CompanyName) via PayPal (this will launch your default browser)" />
     <UI>
-      <UIRef Id="WixUI_InstallDir" />
-      <!-- Trigger application launch custom action on installation exit -->
-      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">
-        <!-- Only run custom action if checkbox is checked and application not previouly installed -->
+      <!-- Reference custom UI -->
+      <!-- See https://github.com/wixtoolset/wix3/tree/develop/src/ext/UIExtension/wixlib -->
+      <UIRef Id="WixUI_CustomInstallDir" />
+      <!-- Trigger application launch on installation exit -->
+      <!-- Only run custom action if first checkbox is checked and application not previously installed -->
+      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="SetWixShellExecTarget1">
         WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="LaunchApplication">
+        WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed
+      </Publish>
+      <!-- Trigger browser launch on installation exit -->
+      <!-- Only run custom action if second checkbox is checked and application not previously installed -->
+      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="SetWixShellExecTarget2">
+        WIXUI_EXITDIALOGOPTIONALCHECKBOX2 = 1 and NOT Installed
+      </Publish>
+      <Publish Dialog="CustomExitDialog" Control="Finish" Event="DoAction" Value="LaunchBrowser">
+        WIXUI_EXITDIALOGOPTIONALCHECKBOX2 = 1 and NOT Installed
       </Publish>
     </UI>
 	  

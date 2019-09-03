@@ -20,7 +20,9 @@
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CustomExitDialog.wxs" />
     <Compile Include="Product.wxs" />
+    <Compile Include="WixUI_CustomInstallDir.wxs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gonzales\Gonzales.csproj">
