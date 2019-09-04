@@ -17,14 +17,14 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
 	<!-- This element creates an msi file -->
   <Product Id="*" UpgradeCode="61d30396-58a4-4727-8680-e015a1e66d0d" Version="1.0.0" Language="1033" Name="$(var.ProductName)" Manufacturer="$(var.CompanyName)">
-    
+
     <!-- Properties about package to be placed in Summary Information Stream -->
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perUser" Comments="Copyright © martindes01 2019" />
 
     <!-- If installation of upgrade product fails, roll back removal of installed product -->
     <!-- Same version upgrades used for testing only -->
 		<MajorUpgrade Schedule="afterInstallInitialize" AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		
+
     <!-- Instruct binder to embed cabinets in product -->
     <MediaTemplate EmbedCab="yes" />
 
@@ -82,16 +82,16 @@
       <ComponentRef Id="StartMenuItems" />
       <ComponentRef Id="StartupRegistryKey" />
     </Feature>
-    
+
     <!-- Include application launch custom actions -->
     <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
     <CustomAction Id="LaunchBrowser" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
     <CustomAction Id="SetWixShellExecTarget1" Property="WixShellExecTarget" Value="[#MainExecutableFile]" />
     <CustomAction Id="SetWixShellExecTarget2" Property="WixShellExecTarget" Value="$(var.DonationFullURL)" />
-    
+
     <!-- Add UI to installer -->
     <!-- See https://wixtoolset.org//documentation/manual/v3/wixui/dialog_reference/wixui_installdir.html -->
-    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)LICENSE.rtf" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SolutionDir)NOTICE.rtf" />
     <Property Id="WIXUI_INSTALLDIR" Value="APPLICATIONROOTDIRECTORY" />
     <Property Id="WIXUI_EXITDIALOGOPTIONALTEXT" Value="Thank you for installing this product. Consider supporting the developer at $(var.DonationBaseURL)." />
     <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProductName)" />
@@ -117,6 +117,6 @@
         WIXUI_EXITDIALOGOPTIONALCHECKBOX2 = 1 and NOT Installed
       </Publish>
     </UI>
-	  
+
   </Product>
 </Wix>
